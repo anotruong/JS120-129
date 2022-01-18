@@ -25,7 +25,8 @@ function createHuman() {
 
       while (true) {
         console.log('\nPlease choose rock, paper, scissors, lizard or spock:');
-        choice = readline.question();
+        choice = readline.question().toLowerCase();
+
         if ((['rock', 'paper', 'scissors', 'spock', 'lizard']).includes(choice)) break;
         console.log('Sorry, invalid choice.');
       }
@@ -41,6 +42,14 @@ function createPlayer() {
   return {
     move: null,
   };
+}
+
+function compCounterAttack () {
+  let badHand = RPSGame.recordOfCompLosses;
+
+  badHand = Object.entries(badHand)
+                  .sort((a, b) => b[1] - a[1])[0][0];
+  return badHand;
 }
 
 function winningPair (winHand, loseHand) {
@@ -75,14 +84,11 @@ const RPSGame = {
       spock: 0
     },    
 
-  compCounterAttack() {
-    let losingChoice = Object.entries(this.recordOfCompLosses)
-                             .sort((a, b) => b[1] - a[1])[0][0];
-    return losingChoice;
-  },
-
   displayWelcomeMessage() {
-    console.log('Welcome to Rock, Paper, Scissors, Lizard, SPOCK!');
+    console.log('Welcome to Rock, Paper, Scissors, Lizard, SPOCK!'); 
+    console.log('This is a game of infinite rounds and only 5 options.');
+    console.log(`\nYes folks, I said only ** 5 options ** because another option would just be too crazy.
+    ...and too much work.\n`);
   },
 
   displayGoodbyeMessage() {
@@ -109,31 +115,27 @@ const RPSGame = {
   displayWinner() {
     let humanMove = this.human.move;
     let computerMove = this.computer.move;
+    let isGoodCompMove = compCounterAttack();
 
-    while (computerMove === this.compCounterAttack()) {
+    // while (computerMove === isGoodCompMove) {
+    //   computerMove = this.computer.move;
+    //   if (computerMove !== compCounter) break;
+    // }
+
+    if (computerMove === isGoodCompMove) {
       computerMove = this.computer.move;
-      if (computerMove !== this.compCounterAttack()) break;
     }
 
-    this.humanMoves.push(this.human.move);
-    this.compMoves.push(this.computer.move);
+    this.humanMoves.push(humanMove);
+    this.compMoves.push(computerMove);
 
-    console.log(`\nYou chose: ${this.human.move}`);
-    console.log(`The computer chose: ${this.computer.move}`);
+    console.log(`\nYou chose: ${humanMove}`);
+    console.log(`The computer chose: ${computerMove}`);
 
     if (winningPair(humanMove, computerMove)) {
           console.log('You win!');
           this.humanScore += 1;
-        } else if ((computerMove === 'rock' && humanMove === 'scissors') ||
-                   (computerMove === 'rock' && humanMove === 'lizard') ||
-                   (computerMove === 'paper' && humanMove === 'rock') ||
-                   (computerMove === 'paper' && humanMove === 'spock') ||
-                   (computerMove === 'scissors' && humanMove === 'paper') ||
-                   (computerMove === 'scissors' && humanMove === 'lizard') |
-                   (computerMove === 'lizard' && humanMove === 'paper') ||
-                   (computerMove === 'lizard' && humanMove === 'spock') ||
-                   (computerMove === 'spock' && humanMove === 'rock') ||
-                   (computerMove === 'spock' && humanMove === 'scissors')){
+        } else if (winningPair(computerMove, humanMove)){
           console.log('Computer wins!');
           this.recordOfCompLosses[computerMove] += 1;
           this.compScore += 1;
@@ -148,11 +150,21 @@ const RPSGame = {
     return answer.toLowerCase()[0] === 'y';
   },
 
+  startButton() {
+    console.log("So let's get started shall we? \nPress 'any key' to start.");
+    let start = readline.question();
+    return start;
+  },
+
   play() {
     console.clear();
-
+    this.displayScoreboard();
     this.displayWelcomeMessage();
+    this.startButton();
+
     while(true) {
+      console.clear();
+
       this.displayScoreboard();
       this.human.choose();
       this.computer.choose();
@@ -162,8 +174,6 @@ const RPSGame = {
       this.displayScoreboard();
       this.displayWinner();
       if (!this.playAgain()) break;
-
-      console.clear();
     }
 
     this.displayGoodbyeMessage();
