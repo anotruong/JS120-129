@@ -1,34 +1,11 @@
 /* Assignment: OO Rock Paper Scissors Bonus Features
-
-Explicit: 
-  Keeping Score // done
-  Add Lizard and Spock // done
-    -Lizard
-      -Eats paper
-      -Rock smashes lizard
-      -Scissors decapitates Lizard
-      -poisons Spock 
-    -Spock 
-      -Smashes scissors
-      -vaporizes rock
-      -Lizard poisons Spock
-      -Paper disproves Spock
-  Keep Track of a history of moves //done
-    -Game ends when user gives up. 
-  Adjust Computer choice based on history
-    -Ex. If the human wins over 60% of their hands when the computer chooses 'rock, then reduce the likelihood that the computer chooses rock. 
-    -Analyysis the history analysis. 
-      Compile an object of losses against the human. 
-        record the occurances of the losses. 
-      Find the key with the highest value
-      If the computer's move is the same key of the highest value
-        then make a new choice. 
 */
 
 const readline = require('readline-sync');
 
 function createComputer() {
   let playerObject = createPlayer();
+
   let computerObject = {
     choose() {
       const choices = ['rock', 'paper', 'scissors', 'lizard', 'spock'];
@@ -64,6 +41,23 @@ function createPlayer() {
   return {
     move: null,
   };
+}
+
+function winningPair (winHand, loseHand) {
+  if ((winHand === 'rock' && loseHand === 'scissors') ||
+  (winHand === 'rock' && loseHand === 'lizard') ||
+  (winHand === 'paper' && loseHand === 'rock') ||
+  (winHand === 'paper' && loseHand === 'spock') ||
+  (winHand === 'scissors' && loseHand === 'paper') ||
+  (winHand === 'scissors' && loseHand === 'lizard') ||
+  (winHand === 'lizard' && loseHand === 'paper') ||
+  (winHand === 'lizard' && loseHand === 'spock') ||
+  (winHand === 'spock' && loseHand === 'rock') ||
+  (winHand === 'spock' && loseHand === 'scissors')) {
+    return true;
+  } else {
+    return false;
+  }
 }
 
 const RPSGame = {
@@ -118,6 +112,7 @@ const RPSGame = {
 
     while (computerMove === this.compCounterAttack()) {
       computerMove = this.computer.move;
+      if (computerMove !== this.compCounterAttack()) break;
     }
 
     this.humanMoves.push(this.human.move);
@@ -126,16 +121,7 @@ const RPSGame = {
     console.log(`\nYou chose: ${this.human.move}`);
     console.log(`The computer chose: ${this.computer.move}`);
 
-    if ((humanMove === 'rock' && computerMove === 'scissors') ||
-        (humanMove === 'rock' && computerMove === 'lizard') ||
-        (humanMove === 'paper' && computerMove === 'rock') ||
-        (humanMove === 'paper' && computerMove === 'spock') ||
-        (humanMove === 'scissors' && computerMove === 'paper') ||
-        (humanMove === 'scissors' && computerMove === 'lizard') ||
-        (humanMove === 'lizard' && computerMove === 'paper') ||
-        (humanMove === 'lizard' && computerMove === 'spock') ||
-        (humanMove === 'spock' && computerMove === 'rock') ||
-        (humanMove === 'spock' && computerMove === 'scissors')) {
+    if (winningPair(humanMove, computerMove)) {
           console.log('You win!');
           this.humanScore += 1;
         } else if ((computerMove === 'rock' && humanMove === 'scissors') ||
@@ -170,6 +156,8 @@ const RPSGame = {
       this.displayScoreboard();
       this.human.choose();
       this.computer.choose();
+
+      console.clear();
 
       this.displayScoreboard();
       this.displayWinner();
