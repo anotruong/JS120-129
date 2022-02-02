@@ -171,7 +171,7 @@ let TTTGame = {
 
         this.computerMoves();
 
-        let tester = readline.question('pause for testing');
+        // let tester = readline.question('pause for testing');
 
         if (this.gameOver()) break;
         this.board.displayWithClear();
@@ -245,29 +245,27 @@ let TTTGame = {
     this.board.markSquareAt(choice, this.human.getMarker());
   },
 
-  compDefense() {
-    // START no parameter
-    // DECLARE 'avaliableSpots' and initialize it to unusedSquares()
-    let avaliableSpots = this.board.unusedSquares();
-    // SELECT sub arrays from 'Winning combo' that includes 'avaliableSpots'
-    let threatenedSubArray = this.POSSIBLE_WINNING_ROWS;
-    threatenedSubArray.filter(subArr => {
-      avaliableSpots.filter(ele => {
-        if (subArr.includes(ele)) {
-          return subArr;
+  compDefenseToOffense(playersMarker) {
+    let marker = playersMarker;
+    let choice;
+    let winArray = this.POSSIBLE_WINNING_ROWS;
+    let threatLvlMidnight = winArray.map(subArrays => {
+      return subArrays.map(ele => this.board.squares[ele].marker)
+    });
+    
+    threatLvlMidnight.forEach((row, rowIdx) => {
+      if (row.includes(' ')) {
+        if (row.indexOf(marker) !== row.lastIndexOf(marker)){
+          let position = threatLvlMidnight[rowIdx].indexOf(' ');
+          row = rowIdx;
+          choice = winArray[row][position];
         }
-      })
+      }
     })
-
-    console.log(threatenedSubArray);
-    // TRANSFORM the elements to marker equivalient
-    // EVALUATE which sub array has two human markers in it
-    //   IF found, select that that avaliable space
-    //   If not, choose nothing and move to randomized choice.
+    return choice;
   },
 
   computerMoves() {
-    this.compDefense();
     let validChoices = this.board.unusedSquares();
     let choice;
 
@@ -275,6 +273,13 @@ let TTTGame = {
       choice = Math.floor((9 * Math.random()) + 1).toString();
     } while (!validChoices.includes(choice));
 
+    if (this.compDefenseToOffense(Square.HUMAN_MARKER) !== undefined) {
+      choice = this.compDefenseToOffense(Square.HUMAN_MARKER);
+    }
+
+    if (this.compDefenseToOffense(Square.COMPUTER_MARKER) !== undefined) {
+      choice = this.compDefenseToOffense(Square.COMPUTER_MARKER);
+    }
 
     this.board.markSquareAt(choice, this.computer.getMarker());
   },
@@ -289,7 +294,7 @@ let TTTGame = {
 
   isWinner(player) {
     return TTTGame.POSSIBLE_WINNING_ROWS.some(row => {
-    return this.board.countMarkersFor(player, row) === 3;
+      return this.board.countMarkersFor(player, row) === 3;
     });
   },
 };
