@@ -137,6 +137,7 @@ class TTTGame {
     this.board = new Board();
     this.human = new Human();
     this.computer = new Computer();
+    this.firstPlayer = this.human;
   }
 
   play() {
@@ -162,17 +163,17 @@ class TTTGame {
   }
 
   playOneGame() {
+    let currentPlayer = this.firstPlayer;
+
     this.board.reset();
     this.board.display();
 
     while (true) {
-      this.humanMoves();
-      if (this.gameOver()) break;
-
-      this.computerMoves();
+      this.playerMOves(currentPlayer);
       if (this.gameOver()) break;
 
       this.board.displayWithClear();
+      currentPlayer = this.togglePlayer(currentPlayer);
     }
 
     this.board.displayWithClear();
@@ -189,6 +190,7 @@ class TTTGame {
 
       if (this.matchOver()) break;
       if (!this.playAgain()) break;
+      this.firstPlayer = this.togglePlayer(this.firstPlayer);
     }
 
     this.displayMatchResults();
@@ -298,7 +300,7 @@ class TTTGame {
   }
 
   displayMatchResults() {
-    if (this.humangetScore() > this.computer.getScore()) {
+    if (this.human.getScore() > this.computer.getScore()) {
       console.log('You won this match! Congratulations!');
     } else if (this.human.getScore() < this.computer.getScore()) {
       console.log("Oh, boo hoo  You lost the match!");
@@ -334,6 +336,18 @@ class TTTGame {
 
   someoneWon() {
     return this.isWinner(this.human) || this.isWinner(this.computer);
+  }
+
+  togglePlayer(player) {
+    return player === this.human ? this.computer : this.human;
+  }
+
+  playerMOves(currentPlayer) {
+    if (currentPlayer === this.human) {
+      this.humanMoves();
+    } else {
+      this.computerMoves();
+    }
   }
 
   updateMatchScore() {
