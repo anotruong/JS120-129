@@ -282,4 +282,271 @@
 
 // console.log(pudding.info()); //My cat Pudding is 7 years old and has black and white fur.
 // console.log(butterscotch.info()) // My cat Butterscotch is 10 years old and has tan and white fur.
+///
+//Given a class `Animal` create two classes `Cat` and `Dog` that inherits from it.
+//the `Cat` constructor should take 3 arguments, `name`, `age`, and `status`. Cats should always have a leg count of 4 and a species of `cat`. 
+//the `introduce` method should be identical to the original except, after the phrase there should be a single space and the words `Meow meow!`.
 
+/*The `Dog` constructor should take 4 arguments, `name`, `age`, `status` and `master`. Dogs should always have a leg count of 4 and a species of `dog`. 
+For the `introduce` method, they should have their own method called `greetMaster()`, which accepts no arguments and returns `Hello (master's name)! Woof, woof!' */
+
+// class Animal {
+//   constructor(name, age, legs, species, status) {
+//     this.name = name;
+//     this.age = age;
+//     this.legs = legs;
+//     this.species = species;
+//     this.status = status;
+//   }
+
+//   introduce() {
+//     return `Hello, my name is ${this.name} and I am ${this.age} years old and ${this.status}.`;
+//   }
+// }
+
+// class Cat extends Animal {
+//   constructor(name, age, status) {
+//     super(name, age, 4, 'cat', status);
+//   }
+
+//   introduce() {
+//     return super.introduce() + ' Meow meow!'
+//   }
+// }
+
+// class Dog extends Animal {
+//   constructor(name, age, status, master) {
+//     super(name, age, 4, 'dog', status);
+//     this.master = master;
+//   }
+
+//   introduce() {
+//     return `${this.greetMaster()}`
+//   }
+
+//   greetMaster() {
+//     return `Hello ${this.master}! Woof woof!`
+//   }
+// }
+
+// let peppermint = new Dog('Peppermint', 8, 'alive', 'Doffy')
+// let sugar = new Cat('Sugar', 8, 'alive');
+// console.log(peppermint.introduce());
+// console.log(sugar.introduce());
+
+//refactor these classes so they have the same super class.
+// class Vehicle {
+//   constructor(make, model) {
+//     this.make = make;
+//     this.model = model;
+//   }
+
+//   info() {
+//     return `${this.make} ${this.model}`;
+//   }
+// }
+// class Car extends Vehicle {
+//   wheels() {
+//     return 4;
+//   }
+// }
+
+// class Motorcycle extends Vehicle {
+//   getWheels() {
+//     return 2;
+//   }
+// }
+
+// class Truck extends Vehicle {
+//   constructor(make, model, payload) {
+//     super(make, model)
+//     this.payload = payload;
+//   }
+
+//   getWheels() {
+//     return 6;
+//   }
+// }
+
+///shouter: rewrite these two object types to use `class` keyword, instead of direct prorotype manipulation. `Person exposes method `greeting` which when called logs the provided greeting text. `Shouter is a subtype of `perosn ` is a bit loud whatever he says is uppercased.
+
+// class Person {
+//   greeting(text) {
+//     console.log(`${text}`);
+//   }
+// }
+
+// class Shouter extends Person {
+//   greeting(text) {
+//     return super.greeting(text.toUpperCase());
+//   }
+// }
+
+// let person = new Person();
+// let shouter = new Shouter();
+
+// person.greeting("Hello. It's very nice to meet you."); // Hello. It's very nice to meet you
+// shouter.greeting("Hello my friend."); // HELLO MY FRIEND.
+
+// let walker = {
+//   walk() {
+//     return `${this.name} ${this.gait()} forwards`
+//   }
+// }
+// class Person {
+//   constructor(name) {
+//     this.name = name;
+//   }
+
+//   gait() {
+//     return "strolls";
+//   }
+// }
+
+// class Cat {
+//   constructor(name) {
+//     this.name = name;
+//   }
+
+//   gait() {
+//     return "saunters";
+//   }
+// }
+
+// class Cheetah {
+//   constructor(name) {
+//     this.name = name;
+//   }
+
+//   gait() {
+//     return "runs";
+//   }
+// }
+
+// Object.assign(Person.prototype, walker);
+// Object.assign(Cat.prototype, walker);
+// Object.assign(Cheetah.prototype, walker)
+
+// let mike = new Person("Mike");
+// console.log(mike.walk());
+// // "Mike strolls forward"
+
+// let kitty = new Cat("Kitty");
+// console.log(kitty.walk());
+// // "Kitty saunters forward"
+
+// let flash = new Cheetah("Flash");
+// console.log(flash.walk());
+// // "Flash runs forward"
+
+//write the classes and methods that will be necessary to make this code run, and log the following output:
+// class Pet {
+//   constructor(species, name) {
+//     this.species = species;
+//     this.name = name;
+//   }
+
+//   info() {
+//     return `a ${this.species} named ${this.name}`
+//   }
+// }
+
+// class Owner {
+//   constructor(name) {
+//     this.name = name;
+//     this.listOfPets = [];
+//   }
+
+//   addPet(pet) {
+//     this.listOfPets.push(pet)
+//   }
+
+//   numberOfPets() {
+//     return this.listOfPets.length;
+//   }
+
+//   printPet() {
+//     this.listOfPets.forEach(pet => console.log(pet.info()))
+//   }
+// }
+
+// class Shelter {
+//   constructor() {
+//     this.listOfOwnerNames = [];
+//   }
+
+//   adopt(masterName, pet) {
+//    if(!this.listOfOwnerNames.includes(masterName)) {
+//      this.listOfOwnerNames.push(masterName);
+//    }
+//     masterName.addPet(pet);
+//   }
+
+//   printAdoptions() {
+//     this.listOfOwnerNames.forEach(owner => {
+//       console.log(`${owner.name} has adopted the following pets:`);
+//       owner.printPet();
+//     })
+//   }
+// }
+
+// let butterscotch = new Pet('cat', 'Butterscotch');
+// let pudding      = new Pet('cat', 'Pudding');
+// let darwin       = new Pet('bearded dragon', 'Darwin');
+// let kennedy      = new Pet('dog', 'Kennedy');
+// let sweetie      = new Pet('parakeet', 'Sweetie Pie');
+// let molly        = new Pet('dog', 'Molly');
+// let chester      = new Pet('fish', 'Chester');
+
+// let phanson = new Owner('P Hanson');
+// let bholmes = new Owner('B Holmes');
+
+// let shelter = new Shelter();
+// shelter.adopt(phanson, butterscotch);
+// shelter.adopt(phanson, pudding);
+// shelter.adopt(phanson, darwin);
+// shelter.adopt(bholmes, kennedy);
+// shelter.adopt(bholmes, sweetie);
+// shelter.adopt(bholmes, molly);
+// shelter.adopt(bholmes, chester);
+// shelter.printAdoptions();
+// console.log(`${phanson.name} has ${phanson.numberOfPets()} adopted pets.`);
+// console.log(`${bholmes.name} has ${bholmes.numberOfPets()} adopted pets.`);
+
+class Banner {
+  constructor(message) {
+    this.message = message;
+  }
+
+  displayBanner() {
+    console.log([this.horizontalRule(), this.emptyLine(), this.messageLine(), this.emptyLine(), this.horizontalRule()].join("\n"));
+  }
+
+  horizontalRule() {
+    return `+-${'-'.repeat(this.message.length)}-+`;
+  }
+
+  emptyLine() {
+    return `|${' '.repeat(this.message.length + 2)}|`
+  }
+
+  messageLine() {
+    return `| ${this.message} |`
+  }
+}
+
+let banner1 = new Banner('To boldly go where no one has gone before.');
+banner1.displayBanner();
+// +--------------------------------------------+
+// |                                            |
+// | To boldly go where no one has gone before. |
+// |                                            |
+// +--------------------------------------------+
+
+let banner2 = new Banner('');
+banner2.displayBanner();
+// +--+
+// |  |
+// |  |
+// |  |
+// +--+
